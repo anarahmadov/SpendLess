@@ -1,4 +1,5 @@
-﻿using SpendLess.Application.Models.Identity
+﻿using SpendLess.Application.Models.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace HR.LeaveManagement.Application.Models.Identity
 {

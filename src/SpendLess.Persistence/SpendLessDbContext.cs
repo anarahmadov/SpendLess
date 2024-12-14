@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
@@ -19,8 +20,5 @@ namespace SpendLess.Persistence
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(SpendLessDbContext).Assembly);
         }
 
-        public DbSet<LeaveRequest> LeaveRequests { get; set; }
-        public DbSet<LeaveType> LeaveTypes { get; set; }
-        public DbSet<LeaveAllocation> LeaveAllocations { get; set; }
     }
 }

@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using SpendLess.Application.Application.Contracts.Identity;
 using SpendLess.Application.Contracts.Identity;
 using SpendLess.Application.Models.Identity;
 using SpendLess.Identity.Models;
@@ -56,3 +55,4 @@ namespace SpendLess.Identity
             return services;
         }
     }
+}

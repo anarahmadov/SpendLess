@@ -1,7 +1,4 @@
-﻿using HR.LeaveManagement.Application.Constants;
-using HR.LeaveManagement.Application.Contracts.Identity;
-using HR.LeaveManagement.Application.Models.Identity;
-using HR.LeaveManagement.Identity.Models;
+﻿using HR.LeaveManagement.Application.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

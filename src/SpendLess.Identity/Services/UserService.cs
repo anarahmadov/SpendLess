@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using SpendLess.Application.Application.Contracts.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using SpendLess.Application.Contracts.Identity;
+using SpendLess.Application.Contracts.Identity;
 using SpendLess.Application.Models.Identity;
 using SpendLess.Identity.Models;
 using System;
