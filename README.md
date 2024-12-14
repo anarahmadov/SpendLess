@@ -1,1 +1,1 @@
-# SpendLess
+#SpendLess is a minimalist and intuitive expense tracking application designed to help users take control of their finances. With features like budgeting advice, real-time analytics, and smart notifications, SpendLess empowers users to save money, track expenses, and achieve their financial goals.
