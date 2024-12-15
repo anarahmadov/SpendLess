@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using SpendLess.Api.Middlewares;
+using SpendLess.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -49,10 +50,10 @@ builder.Services.AddSwaggerGen(c =>
 
 });
 
-//builder.ConfigureApplicationServices();
-//builder.ConfigureInfrastructureServices(config);
-//builder.ConfigurePersistenceServices(config);
-//builder.ConfigureIdentityServices(config);
+//builder.Services.ConfigureApplicationServices();
+//builder.Services.ConfigureInfrastructureServices(config);
+//builder.Services.ConfigurePersistenceServices(config);
+builder.Services.ConfigureIdentityServices(config);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

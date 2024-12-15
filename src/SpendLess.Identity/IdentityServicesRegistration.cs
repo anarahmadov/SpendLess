@@ -23,7 +23,7 @@ namespace SpendLess.Identity
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
 
             services.AddDbContext<SpendLessIdentityDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("LeaveManagementIdentityConnectionString"),
+                options.UseSqlServer(configuration.GetConnectionString("SpendLessIdentityConnectionString"),
                 b => b.MigrationsAssembly(typeof(SpendLessIdentityDbContext).Assembly.FullName)));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()

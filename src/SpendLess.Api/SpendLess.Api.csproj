@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SpendLess.Application\SpendLess.Application.csproj" />
+    <ProjectReference Include="..\SpendLess.Identity\SpendLess.Identity.csproj" />
   </ItemGroup>
 
 </Project>
