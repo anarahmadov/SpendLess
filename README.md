@@ -26,7 +26,3 @@
 
 - Receive suggestions to optimize spending.
 
-- Cloud Sync
-
-- Access your expense data anytime, anywhere.
-
