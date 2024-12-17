@@ -1,4 +1,10 @@
+🚀 Track your expenses. Plan your budget. Achieve your goals.
+
 **SpendLess** is a minimalist and intuitive expense tracking application designed to help users take control of their finances. With features like budgeting advice, real-time analytics, and smart notifications, SpendLess empowers users to save money, track expenses, and achieve their financial goals.
+
+📊 Analyze your spending habits.
+💡 Make better financial decisions.
+🎯 Stay on top of your goals effortlessly.
 
 **Key Features**
 
@@ -25,4 +31,12 @@
 - Get alerts when you're nearing budget limits.
 
 - Receive suggestions to optimize spending.
+
+ **🛠️ Tech Stack**
+**Backend:** ASP.NET Core MVC (C#)
+**Database:** SQL Server with Entity Framework Core (EF Core)
+**Frontend:** Razor Views (Server-side rendering)
+**Scheduling:** Hangfire for background jobs and periodic tasks
+**Notifications:** Email or push notifications via third-party integrations (e.g., SendGrid, Firebase)
+**Version Control:** Git
 
