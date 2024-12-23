@@ -35,15 +35,21 @@
  **🛠️ Tech Stack**
  
 **Backend:** 
+
 ASP.NET Core MVC (C#)
 **Database:** 
+
 SQL Server with Entity Framework Core (EF Core)
 **Frontend:** 
+
 Razor Views (Server-side rendering)
 **Scheduling:** 
+
 Hangfire for background jobs and periodic tasks
 **Notifications:** 
+
 Email or push notifications via third-party integrations (e.g., SendGrid, Firebase)
 **Version Control:** 
+
 Git
 
