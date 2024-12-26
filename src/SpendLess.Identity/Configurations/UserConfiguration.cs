@@ -20,8 +20,8 @@ namespace SpendLess.Identity.Configurations
                      Id = 1,
                      RoleId = 1,
                      Email = "ahmadovanarr@gmail.com",
-                     Name = "System",
-                     Surname = "Admin",
+                     Firstname = "System",
+                     Lastname = "Admin",
                      PasswordHash = hasher.HashPassword(null, "P@ssword1")
                  }
             );
