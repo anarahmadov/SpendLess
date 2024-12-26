@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SpendLess.Identity.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,17 +14,15 @@ namespace SpendLess.Identity.Configurations
         public void Configure(EntityTypeBuilder<IdentityRole> builder)
         {
             builder.HasData(
-                new IdentityRole
+                new Role
                 {
-                    Id = "cac43a6e-f7bb-4448-baaf-1add431ccbbf",
-                    Name = "User",
-                    NormalizedName = "USER"
+                    Id = 1,
+                    Name = "Admin"
                 },
-                new IdentityRole
+                new Role
                 {
-                    Id = "cbc43a8e-f7bb-4445-baaf-1add431ffbbf",
-                    Name = "Administrator",
-                    NormalizedName = "ADMINISTRATOR"
+                    Id = 2,
+                    Name = "User"
                 }
             );
         }

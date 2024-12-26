@@ -5,9 +5,16 @@ using System.Text;
 
 namespace SpendLess.Identity.Models
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public int Id { get; set; }
+        public int RoleId { get; set; }
+        public int UserSettingsId { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public int Age { get; set; }
+        public DateTime Birthday { get; set; }
+        public string Email { get; set; }
+        public string PasswordHash { get; set; }
     }
 }
