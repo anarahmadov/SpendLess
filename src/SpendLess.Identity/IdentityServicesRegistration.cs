@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SpendLess.Application.Contracts.Identity;
 using SpendLess.Application.Models.Identity;
+using SpendLess.Identity.Helpers;
 using SpendLess.Identity.Models;
 using SpendLess.Identity.Services;
 
@@ -26,9 +27,8 @@ namespace SpendLess.Identity
                 options.UseSqlServer(configuration.GetConnectionString("SpendLessIdentityConnectionString"),
                 b => b.MigrationsAssembly(typeof(SpendLessIdentityDbContext).Assembly.FullName)));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<SpendLessIdentityDbContext>().AddDefaultTokenProviders();
-
+            services.AddTransient<IPasswordHasher<ApplicationUser>, PasswordHasher<ApplicationUser>>();
+            services.AddTransient<IPasswordHelper, PasswordHelper>();
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IUserService, UserService>();
 

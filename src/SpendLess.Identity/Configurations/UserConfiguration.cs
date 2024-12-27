@@ -22,6 +22,7 @@ namespace SpendLess.Identity.Configurations
                      Email = "ahmadovanarr@gmail.com",
                      Firstname = "System",
                      Lastname = "Admin",
+                     Username = "system_admin",
                      PasswordHash = hasher.HashPassword(null, "P@ssword1")
                  }
             );
