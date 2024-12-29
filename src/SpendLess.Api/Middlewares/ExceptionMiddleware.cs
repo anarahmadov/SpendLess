@@ -1,17 +1,25 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SpendLess.Application.Exceptions;
 using System.Net;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace SpendLess.Api.Middlewares
 {
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        public ExceptionMiddleware(RequestDelegate next)
+        private readonly ProblemDetailsFactory _problemDetailsFactory;
+        public ExceptionMiddleware(RequestDelegate next, 
+                                   ProblemDetailsFactory problemDetailsFactory)
         {
             _next = next;
+            _problemDetailsFactory = problemDetailsFactory;
         }
-        public async Task InvokeAsync(HttpContext httpContext)
+
+        public async Task InvokeAsync(HttpContext httpContext, ILogger<ExceptionMiddleware> logger)
         {
             try
             {
@@ -19,43 +27,51 @@ namespace SpendLess.Api.Middlewares
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(httpContext, ex);
+                await HandleExceptionAsync(httpContext, ex, logger);
             }
         }
-        private Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private async Task HandleExceptionAsync(HttpContext httpContext, Exception exception, ILogger<ExceptionMiddleware> logger)
         {
-            context.Response.ContentType = "application/json";
-            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
-            string result = JsonConvert.SerializeObject(new ErrorDeatils
-            {
-                ErrorMessage = exception.Message,
-                ErrorType = "Failure"
-            });
+            var problem = new ProblemDetails();
+            problem.Instance = httpContext.Request.Path;
+            problem.Detail = exception?.Message;
 
             switch (exception)
             {
-                case BadRequestException badRequestException:
-                    statusCode = HttpStatusCode.BadRequest;
-                    break;
                 case ValidationException validationException:
-                    statusCode = HttpStatusCode.BadRequest;
-                    result = JsonConvert.SerializeObject(validationException.Errors);
+                    problem.Status = (int)HttpStatusCode.InternalServerError;
+                    foreach (var error in validationException.Errors)
+                    {
+                        problem.Extensions.Add(error.Key, error.Value);
+                        logger.LogError("Error happened at {@ErrorKey}: {@ErrorValue}",
+                                          error.Key, error.Value);
+                    }
                     break;
-                case NotFoundException notFoundException:
-                    statusCode = HttpStatusCode.NotFound;
+                case NotFoundException:
+                    problem.Status = (int)HttpStatusCode.NotFound;
+                    break;
+                case BadRequestException:
+                    problem.Status = (int)HttpStatusCode.BadRequest;
                     break;
                 default:
                     break;
             }
 
-            context.Response.StatusCode = (int)statusCode;
-            return context.Response.WriteAsync(result);
-        }
-    }
+            ProblemDetails problemDetails;
+            if (_problemDetailsFactory != null)
+            {
+                problemDetails = _problemDetailsFactory.CreateProblemDetails(httpContext, statusCode: problem.Status);
+                problem.Title = problemDetails.Title;
+                problem.Type = problemDetails.Type;
+            }
 
-    public class ErrorDeatils
-    {
-        public string ErrorType { get; set; }
-        public string ErrorMessage { get; set; }
+            var result = new ObjectResult(problem)
+            {
+                StatusCode = problem.Status
+            };
+            var response = JsonConvert.SerializeObject(result.Value);
+            httpContext.Response.ContentType = "application/problem+json";
+            await httpContext.Response.WriteAsync(response);
+        }
     }
 }
