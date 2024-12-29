@@ -1,4 +1,4 @@
-Track your expenses. Plan your budget. Achieve your goals.
+**Track your expenses. Plan your budget. Achieve your goals**
 
 
 
