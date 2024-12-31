@@ -6,11 +6,11 @@
 
 
 
-📊 Analyze your spending habits.
+📊 **Analyze your spending habits.**
 
-💡 Make better financial decisions.
+💡 **Make better financial decisions.**
 
-🎯 Stay on top of your goals effortlessly.
+🎯 **Stay on top of your goals effortlessly.**
 
 **Key Features**
 
