@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using SpendLess.Application.Constants;
 using SpendLess.Application.Contracts.Persistence;
+using SpendLess.Application.Contracts.Persistence.Token;
+using SpendLess.Identity;
+using SpendLess.Persistence.Repositories.Token;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -11,22 +15,26 @@ namespace SpendLess.Persistence.Repositories
     {
 
         private readonly SpendLessDbContext _context;
+        private readonly SpendLessIdentityDbContext _identityDbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
-
-        public UnitOfWork(SpendLessDbContext context, IHttpContextAccessor httpContextAccessor)
+        private ITokenRepository _tokenRepository;
+        public UnitOfWork(SpendLessDbContext context, 
+                          SpendLessIdentityDbContext identityDbContext,
+                          IHttpContextAccessor httpContextAccessor,
+                          ITokenRepository tokenRepository)
         {
             _context = context;
-            this._httpContextAccessor = httpContextAccessor;
+            _identityDbContext = identityDbContext;
+            _httpContextAccessor = httpContextAccessor;
+            _tokenRepository = tokenRepository;
         }
-
-        //public ILeaveAllocationRepository LeaveAllocationRepository => 
-        //    _leaveAllocationRepository ??= new LeaveAllocationRepository(_context);
+        public ITokenRepository TokenRepository =>
+            _tokenRepository ??= new TokenRepository(_identityDbContext);
         //public ILeaveTypeRepository LeaveTypeRepository => 
         //    _leaveTypeRepository ??= new LeaveTypeRepository(_context);
         //public ILeaveRequestRepository LeaveRequestRepository => 
         //    _leaveRequestRepository ??= new LeaveRequestRepository(_context);
-        
+
         public void Dispose()
         {
             _context.Dispose();
@@ -38,6 +46,7 @@ namespace SpendLess.Persistence.Repositories
             var username = _httpContextAccessor.HttpContext.User.FindFirst(CustomClaimTypes.Uid)?.Value;
 
             await _context.SaveChangesAsync(username);
+            await _identityDbContext.SaveChangesAsync();
         }
     }
 }

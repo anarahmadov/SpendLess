@@ -5,13 +5,15 @@ using System.Threading.Tasks;
 
 namespace SpendLess.Application.Contracts.Persistence
 {
-    public interface IGenericRepository<T> where T : class
+    public interface IGenericRepository<TEntity, TContext>
+        where TEntity : class
+        where TContext : class
     {
-        Task<T> Get(int id);
-        Task<IReadOnlyList<T>> GetAll();
-        Task<T> Add(T entity);
+        Task<TEntity> Get(int id);
+        Task<IReadOnlyList<TEntity>> GetAll();
+        Task<TEntity> Add(TEntity entity);
         Task<bool> Exists(int id);
-        Task Update(T entity);
-        Task Delete(T entity);
+        Task Update(TEntity entity);
+        Task Delete(TEntity entity);
     }
 }

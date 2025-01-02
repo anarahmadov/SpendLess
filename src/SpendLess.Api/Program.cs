@@ -1,7 +1,8 @@
-using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using SpendLess.Api.Middlewares;
 using SpendLess.Identity;
+using SpendLess.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -44,7 +45,7 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "HR Leave Management Api",
+        Title = "SpendLess Api",
 
     });
 
@@ -52,12 +53,15 @@ builder.Services.AddSwaggerGen(c =>
 
 //builder.Services.ConfigureApplicationServices();
 //builder.Services.ConfigureInfrastructureServices(config);
-//builder.Services.ConfigurePersistenceServices(config);
+builder.Services.ConfigurePersistenceServices(config);
 builder.Services.ConfigureIdentityServices(config);
+builder.Services.AddTransient<Microsoft.Extensions.Logging.ILogger<WebApplication>, Microsoft.Extensions.Logging.Logger<WebApplication>>();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
 
 var app = builder.Build();
 
@@ -66,6 +70,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+
+app.UseSerilogRequestLogging();
 
 app.UseMiddleware<ExceptionMiddleware>();
 

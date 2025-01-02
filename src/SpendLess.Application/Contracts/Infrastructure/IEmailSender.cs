@@ -1,5 +1,4 @@
-﻿using HR.LeaveManagement.Application.Models;
-using SpendLess.Application.Models;
+﻿using SpendLess.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

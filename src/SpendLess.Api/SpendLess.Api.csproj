@@ -12,16 +12,18 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SpendLess.Application\SpendLess.Application.csproj" />
     <ProjectReference Include="..\SpendLess.Identity\SpendLess.Identity.csproj" />
+    <ProjectReference Include="..\SpendLess.Persistence\SpendLess.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <Folder Include="Handlers\" />
   </ItemGroup>
 
 </Project>

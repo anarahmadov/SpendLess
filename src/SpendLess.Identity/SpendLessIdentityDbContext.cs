@@ -25,6 +25,6 @@ namespace SpendLess.Identity
 
         public DbSet<ApplicationUser> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<ApplicationToken> ApplicationTokens { get; set; }
     }
 }

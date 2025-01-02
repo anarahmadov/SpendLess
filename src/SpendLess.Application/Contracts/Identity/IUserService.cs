@@ -1,16 +1,15 @@
-﻿using HR.LeaveManagement.Application.Models.Identity;
-using SpendLess.Application.Models.Identity;
-using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SpendLess.Application.DTOs.Users;
 
 namespace SpendLess.Application.Contracts.Identity
 {
     public interface IUserService
     {
-        Task<List<User>> GetUsers();
-        Task<User> GetUser(string userId);
+        Task<int> CreateUser(CreateUserDto userDto);
+        Task<(bool, UserDto)> CheckUserByEmailAndPassword(string email, string password);
+
+        Task<List<UserDto>> GetUsers();
+        Task<UserDto?> GetUserByEmail(string email);
+        Task<UserDto?> GetUserByUsername(string username);
+        Task<UserDto> GetUser(int userId);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SpendLess.Application.Contracts.Persistence;
+using SpendLess.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,24 +9,33 @@ using System.Threading.Tasks;
 
 namespace SpendLess.Persistence.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<TEntity, TContext> : IGenericRepository<TEntity, TContext>
+        where TEntity : class
+        where TContext : class
     {
-        private readonly SpendLessDbContext _dbContext;
-
-        public GenericRepository(SpendLessDbContext dbContext)
+        private readonly DbContext _dbContext;
+        public GenericRepository(TContext dbContext)
         {
-            _dbContext = dbContext;
+            switch (dbContext)
+            {
+                case SpendLessDbContext:
+                    _dbContext = dbContext as SpendLessDbContext;
+                        break;
+                case SpendLessIdentityDbContext:
+                    _dbContext = dbContext as SpendLessIdentityDbContext;
+                    break;
+            }
         }
 
-        public async Task<T> Add(T entity)
+        public async Task<TEntity> Add(TEntity entity)
         {
             await _dbContext.AddAsync(entity);
             return entity;
         }
 
-        public async Task Delete(T entity)
+        public async Task Delete(TEntity entity)
         {
-            _dbContext.Set<T>().Remove(entity);
+            _dbContext.Set<TEntity>().Remove(entity);
         }
 
         public async Task<bool> Exists(int id)
@@ -34,21 +44,19 @@ namespace SpendLess.Persistence.Repositories
             return entity != null;
         }
 
-        public async Task<T> Get(int id)
+        public async Task<TEntity> Get(int id)
         {
-            return await _dbContext.Set<T>().FindAsync(id);
+            return await _dbContext.Set<TEntity>().FindAsync(id);
         }
 
-        public async Task<IReadOnlyList<T>> GetAll()
+        public async Task<IReadOnlyList<TEntity>> GetAll()
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            return await _dbContext.Set<TEntity>().ToListAsync();
         }
 
-        public async Task Update(T entity)
+        public async Task Update(TEntity entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
         }
-
-        
     }
 }
