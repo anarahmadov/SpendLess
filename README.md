@@ -10,7 +10,7 @@
 
 💡 **Make better financial decisions.**
 
-🎯 **Stay on top of your goals effortlessly.**
+ **Stay on top of your goals effortlessly.**
 
 **Key Features**
 
