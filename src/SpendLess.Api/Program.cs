@@ -76,7 +76,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthentication();
 
 app.UseSwagger();
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HR.LeaveManagement.Api v1"));
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SpendLess.Api v1"));
 
 app.UseHttpsRedirection();
 
