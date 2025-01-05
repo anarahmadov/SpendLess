@@ -1,4 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SpendLess.Application.Constants;
@@ -24,49 +30,56 @@ namespace SpendLess.Identity.Services
         private readonly JwtSettings _jwtSettings;
         private readonly ApplicationTokenSettings _tokenSettings;
         private readonly IUnitOfWork _uow;
+        private readonly ILogger<TokenService> _logger;
         public TokenService(IOptions<JwtSettings> jwtSettings,
                             IOptions<ApplicationTokenSettings> tokenSettings,
-                            IUnitOfWork uow)
+                            IUnitOfWork uow,
+                            ILogger<TokenService> logger)
         {
             _jwtSettings = jwtSettings.Value;
             _tokenSettings = tokenSettings.Value;
             _uow = uow;
+            _logger = logger;
         }
 
-        public IToken GenerateAccessToken(UserDto user)
+        public string GenerateAccessToken<TClaim>(ICollection<TClaim> claims)
+            where TClaim : class
         {
-            var userRole = user.RoleName;
-
-            var roleClaims = new Claim[]{
-                new Claim(ClaimTypes.Role, userRole)
-            };
-
-            var claims = new Claim[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(CustomClaimTypes.Uid, user.Id.ToString())
-            }
-            .Union(roleClaims);
-
+            var claimsList = (IList<Claim>)claims;
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
-            var jwtSecurityToken = new JwtToken(
+            var jwtSecurityToken = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
-                claims: claims,
+                claims: claimsList,
                 expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes),
                 signingCredentials: signingCredentials);
 
-            return jwtSecurityToken;
+            return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         }
 
         public string GenerateRefreshToken()
         {
             // to do: generating refresh token logic
             return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+        }
+
+        public async Task<ApplicationTokenBase> GetToken(string token, bool isRevoked = false)
+        {
+            return await _uow.TokenRepository.GetToken(token, isRevoked);
+        }
+
+        public async Task<IList<ApplicationTokenBase>> GetTokensByUserId(int userId, bool isRevoked = false)
+        {
+            var tokensList = await _uow.TokenRepository.GetTokensByUserId(userId, isRevoked);
+            return await tokensList.ToListAsync();
+        }
+
+        public async Task RevokeToken(string token)
+        {
+            await _uow.TokenRepository.RevokeToken(token);
+            await _uow.Save();
         }
 
         public async Task SaveToken(int userId, string refreshTokenString)

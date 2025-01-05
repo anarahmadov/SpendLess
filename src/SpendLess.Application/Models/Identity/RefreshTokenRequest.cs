@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SpendLess.Application.Models.Identity
 {
-    public interface IToken
+    public class RefreshTokenRequest
     {
-
+        public string Token { get; set; }
     }
 }

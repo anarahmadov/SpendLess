@@ -19,5 +19,6 @@ namespace SpendLess.Identity.Models
         public string PasswordHash { get; set; } = string.Empty;
 
         public Role Role { get; set; }
+        public ICollection<ApplicationToken> ApplicationTokens { get; set; }
     }
 }

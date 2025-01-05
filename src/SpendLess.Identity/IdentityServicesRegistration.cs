@@ -22,6 +22,7 @@ namespace SpendLess.Identity
         public static IServiceCollection ConfigureIdentityServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+            services.Configure<ApplicationTokenSettings>(configuration.GetSection("AppplicationTokenSettings"));
 
             services.AddDbContext<SpendLessIdentityDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("SpendLessIdentityConnectionString"),

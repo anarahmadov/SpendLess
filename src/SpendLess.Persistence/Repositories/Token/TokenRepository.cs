@@ -1,12 +1,8 @@
-﻿using SpendLess.Application.Contracts.Persistence.Token;
+﻿using Microsoft.EntityFrameworkCore;
+using SpendLess.Application.Contracts.Persistence.Token;
 using SpendLess.Application.Models.Identity;
 using SpendLess.Identity;
 using SpendLess.Identity.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpendLess.Persistence.Repositories.Token
 {
@@ -18,17 +14,29 @@ namespace SpendLess.Persistence.Repositories.Token
             _context = context;
         }
 
+        public async Task<ApplicationTokenBase> GetToken(string token, bool isRevoked = false)
+        {
+            return await _context.ApplicationTokens.FirstOrDefaultAsync(x => x.TokenString == token && x.IsRevoked == isRevoked);
+        }
+
+        public async Task<IQueryable<ApplicationTokenBase>> GetTokensByUserId(int userId, bool isRevoked = false)
+        {
+             return _context.ApplicationTokens
+                .Where(x => x.UserId == userId && x.IsRevoked == isRevoked);
+        }
+
+        public async Task RevokeToken(string token)
+        {
+            var applicationToken = await GetToken(token);
+            applicationToken.IsRevoked = true;
+        }
+
         public async Task Save(ApplicationTokenBase token)
         {
-            var refreshToken = new ApplicationToken()
-            {
-                TokenString = token.TokenString,
-                UserId = token.UserId,
-                ExpirationDate = DateTime.UtcNow.AddDays(1),
-                IsRevoked = false
-            };
-
-            await _context.ApplicationTokens.AddAsync(refreshToken);
+            var applicationToken = (ApplicationToken)token;
+            await _context.ApplicationTokens.AddAsync(applicationToken);
         }
+
+        
     }
 }

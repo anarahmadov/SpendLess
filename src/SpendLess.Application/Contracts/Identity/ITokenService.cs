@@ -11,9 +11,11 @@ namespace SpendLess.Application.Contracts.Identity
 {
     public interface ITokenService
     {
-        IToken GenerateAccessToken(UserDto user);
+        string GenerateAccessToken<TClaim>(ICollection<TClaim> claims) where TClaim : class;
         string GenerateRefreshToken();
         Task SaveToken(int userId, string refreshTokenString);
-        //CustomToken? ValidateToken(string token);
+        Task RevokeToken(string token);
+        Task<ApplicationTokenBase> GetToken(string token, bool isRevoked = false);
+        Task<IList<ApplicationTokenBase>> GetTokensByUserId(int userId, bool isRevoked = false);
     }
 }

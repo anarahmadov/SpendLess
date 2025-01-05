@@ -14,6 +14,13 @@ namespace SpendLess.Api.Controllers
             _authenticationService = authenticationService;
         }
 
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _authenticationService.Logout();
+            return Ok();
+        }
+
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponse>> Login(AuthRequest request)
         {

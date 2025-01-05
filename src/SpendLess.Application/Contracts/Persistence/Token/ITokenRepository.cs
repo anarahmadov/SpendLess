@@ -10,5 +10,8 @@ namespace SpendLess.Application.Contracts.Persistence.Token
     public interface ITokenRepository
     {
         Task Save(ApplicationTokenBase token);
+        Task RevokeToken(string token);
+        Task<ApplicationTokenBase> GetToken(string token, bool isRevoked = false);
+        Task<IQueryable<ApplicationTokenBase>> GetTokensByUserId(int userId, bool isRevoked = false);
     }
 }

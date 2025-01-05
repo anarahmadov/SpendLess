@@ -35,7 +35,7 @@ namespace SpendLess.Api.Middlewares
             var problem = new ProblemDetails();
             problem.Instance = httpContext.Request.Path;
             problem.Detail = exception?.Message;
-
+            
             switch (exception)
             {
                 case ValidationException validationException:
@@ -56,7 +56,13 @@ namespace SpendLess.Api.Middlewares
                     problem.Status = (int)HttpStatusCode.BadRequest;
                     logger.LogError("BadRequest exception: {@Message}", badRequestException.Message);
                     break;
-                default:
+                case SpendLess.Application.Exceptions.UnauthorizedAccessException unauthorizedAccessException: 
+                    problem.Status = (int)HttpStatusCode.Unauthorized;
+                    logger.LogError("UnauthorizedAccess exception: {@Message}", unauthorizedAccessException.Message);
+                    break;
+                case Exception unhandledException:
+                    problem.Status = (int)(HttpStatusCode.InternalServerError);
+                    logger.LogError("Unhandled exception: {@Message}", unhandledException.Message);
                     break;
             }
 

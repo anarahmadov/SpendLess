@@ -50,13 +50,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 
 });
-
 //builder.Services.ConfigureApplicationServices();
 //builder.Services.ConfigureInfrastructureServices(config);
 builder.Services.ConfigurePersistenceServices(config);
 builder.Services.ConfigureIdentityServices(config);
 builder.Services.AddTransient<Microsoft.Extensions.Logging.ILogger<WebApplication>, Microsoft.Extensions.Logging.Logger<WebApplication>>();
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
