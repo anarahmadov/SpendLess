@@ -21,6 +21,7 @@ namespace SpendLess.Identity
         {            
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new ApplicationTokenConfiguration());
         }
 
         public DbSet<ApplicationUser> Users { get; set; }

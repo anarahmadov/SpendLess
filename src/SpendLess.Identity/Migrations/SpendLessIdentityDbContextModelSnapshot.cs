@@ -24,11 +24,9 @@ namespace SpendLess.Identity.Migrations
 
             modelBuilder.Entity("SpendLess.Identity.Models.ApplicationToken", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("TokenString")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
@@ -36,18 +34,14 @@ namespace SpendLess.Identity.Migrations
                     b.Property<bool>("IsRevoked")
                         .HasColumnType("bit");
 
-                    b.Property<string>("TokenString")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("TokenString");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ApplicationTokens");
+                    b.ToTable("ApplicationTokens", (string)null);
                 });
 
             modelBuilder.Entity("SpendLess.Identity.Models.ApplicationUser", b =>
@@ -105,7 +99,7 @@ namespace SpendLess.Identity.Migrations
                             Email = "ahmadovanarr@gmail.com",
                             Firstname = "System",
                             Lastname = "Admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAED6ZbDAkYAYc+es/JO9OORzi281MwJCKWS9B1DQ9S5tD/D0nnOhA0XGtkwZC1Ffrbw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFU2GolFpBuZ2pV141yZI1SSuyf53Rs+abj4lHxvlJm2fN9ie0lbE14szvqxFKsI1A==",
                             RoleId = 1,
                             UserSettingsId = 0,
                             Username = "system_admin"
@@ -144,7 +138,7 @@ namespace SpendLess.Identity.Migrations
             modelBuilder.Entity("SpendLess.Identity.Models.ApplicationToken", b =>
                 {
                     b.HasOne("SpendLess.Identity.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("ApplicationTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -161,6 +155,11 @@ namespace SpendLess.Identity.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("SpendLess.Identity.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("ApplicationTokens");
                 });
 #pragma warning restore 612, 618
         }
